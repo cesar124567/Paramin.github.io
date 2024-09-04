@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta de Amor Animada</title>
+    <style>
+        body {
+            background-color: #FFD1DC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Georgia', serif;
+        }
+        .container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .envelope {
+            position: absolute;
+            width: 200px;
+            height: 120px;
+            background-color: #FF99AA;
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%);
+            transition: all 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .envelope-flap {
+            position: absolute;
+            width: 200px;
+            height: 120px;
+            background-color: #FF8899;
+            clip-path: polygon(0 80%, 50% 100%, 100% 80%, 50% 0);
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .letter {
+            position: absolute;
+            width: 180px;
+            height: 280px; /* Aumentar la altura de la carta */
+            background-color: white;
+            padding: 10px;
+            top: 60px;
+            left: 10px;
+            transform: translateY(-250px);
+            transition: transform 0.5s ease;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            text-align: center;
+            font-size: 14px; /* Ajuste opcional del tamaño de la fuente */
+        }
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+        }
+        .heart::before {
+            left: -10px;
+        }
+        .heart::after {
+            top: -10px;
+        }
+        .button-container {
+            display: flex;
+            margin-top: 320px;
+        }
+        .button-container a, .button-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #FF6B8E;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            margin-right: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            text-align: center;
+        }
+        .button-container a:hover, .button-container button:hover {
+            background-color: #FF506D;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="envelope"></div>
+        <div class="envelope-flap"></div>
+        <div class="letter">
+            <p>Cuando miro tus ojos,<br>
+            veo el universo entero<br>
+            en su brillo inmortal,<br>
+            donde el tiempo se detiene<br>
+            y mi corazón late al compás<br>
+            de una melodía sin fin.</p>
+            <p>La distancia que nos separa<br>
+            no es más que un susurro lejano,<br>
+            pues en cada pensamiento<br>
+            te encuentro, tan cerca,<br>
+            como si el aire que respiro<br>
+            fuera el mismo que envuelve tu ser.</p>
+         
+        </div>
+        <div class="button-container">
+            <button onclick="openEnvelope()">ABRIR</button>
+            <a href="Parati.jpg" download="Parati.jpg">DESCARGA TU REGALO</a>
+            <button onclick="resetEnvelope()">REINICIAR</button>
+        </div>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            document.querySelector('.envelope-flap').style.transform = 'rotateX(180deg)';
+            setTimeout(() => {
+                document.querySelector('.letter').style.transform = 'translateY(0)';
+                document.querySelector('.letter').style.opacity = '1';
+                createHearts();
+            }, 500);
+        }
+
+        function resetEnvelope() {
+            document.querySelector('.envelope-flap').style.transform = 'rotateX(0deg)';
+            document.querySelector('.letter').style.transform = 'translateY(-250px)';
+            document.querySelector('.letter').style.opacity = '0';
+            document.querySelectorAll('.heart').forEach(heart => heart.remove());
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 10; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.left = Math.random() * 160 + 20 + 'px';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                document.querySelector('.container').appendChild(heart);
+                animateHeart(heart);
+            }
+        }
+
+        function animateHeart(heart) {
+            let position = 200;
+            let opacity = 1;
+            const animation = setInterval(() => {
+                if (position < -20 || opacity <= 0) {
+                    clearInterval(animation);
+                    heart.remove();
+                } else {
+                    position -= 1;
+                    opacity -= 0.02;
+                    heart.style.top = position + 'px';
+                    heart.style.opacity = opacity;
+                }
+            }, 20);
+        }
+    </script>
+</body>
+</html>
